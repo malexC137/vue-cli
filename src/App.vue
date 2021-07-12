@@ -4,11 +4,13 @@
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <div class="container">
       <div class="row row-cols-3 g-4">
-        <div class="col" v-for="index in 10" :key="index">
+        <div class="col" v-for="post in postsList" :key="post.id">
           <Card
-            :title="'Titolo ' + index"
-            :content="'Contenuto della <strong>card</strong> ' + index"
-            linkText="Mostra dettagli"
+            :title="post.title"
+            :content="post.content"
+            :img="post.cover_url"
+            :category="post.category"
+            :tags="post.tags"
           />
         </div>
       </div>
@@ -28,6 +30,24 @@ export default {
     Card,
     Navbar,
   },
+  data() {
+    return {
+      title: "La mia prima pagina con Vue Cli",
+      postsList: [],
+    };
+  },
+  computed: {},
+  methods: {},
+  mounted() {
+    this.axios.get("http://127.0.0.1:8000/api/posts")
+    .then(resp => {
+      this.postsList = resp.data.results;
+    })
+    .catch((er) => {
+      console.error(er);
+      alert("Errore nel caricamento dati.")
+    })
+  }
 };
 </script>
 
